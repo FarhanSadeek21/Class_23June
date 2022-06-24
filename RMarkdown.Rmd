@@ -1,0 +1,129 @@
+---
+title: "Billboard"
+output: html_document
+date: '2022-06-21'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(primer.data)
+library(billboard)
+library(plotly)
+```
+
+
+```{r}
+glimpse(wiki_hot_100s)
+```
+
+```{r}
+summary(wiki_hot_100s)
+```
+
+```{r}
+x <- wiki_hot_100s |>
+    as_tibble(wiki_hot_100s)
+
+```
+
+```{r}
+## Who appered the most ?
+x |>
+    # mutate(year = as.numeric(year)) |>
+    select(artist) |>
+    group_by(artist) |>
+    summarize(artist_freq = n()) |>
+    arrange(desc(artist_freq))
+```
+
+```{r}
+
+x |>
+    # mutate(year = as.numeric(year)) |>
+    select(artist) |>
+    group_by(artist) |>
+    summarize(artist_freq = n()) |>
+    arrange(desc(artist_freq)) |>
+    filter(artist_freq == 1)
+    
+```
+
+```{r}
+
+one_time <- x |>
+    # mutate(year = as.numeric(year)) |>
+    select(artist) |>
+    group_by(artist) |>
+    summarize(artist_freq = n()) |>
+    arrange(desc(artist_freq)) |>
+    filter(artist_freq == 1)
+    
+one_time <- nrow(one_time)
+print(one_time)
+     
+```
+
+
+
+
+```{r}
+# In which year most artists appeared the most
+
+x <- wiki_hot_100s |>
+    as_tibble() |>
+    mutate(year = parse_number(year)) |>
+    group_by(year) |>
+    summarize(year_most_ = n_distinct()) |>
+    arrange(desc(year_most_))
+
+```
+
+
+```{r}
+
+x <- wiki_hot_100s |>
+    as_tibble() |>
+    mutate(year = parse_number(year)) |>
+    group_by(year) |>
+    distinct(artist) |>
+    summarize(distinct_artist = n()) |>
+    arrange(desc(distinct_artist))
+
+x
+
+```
+
+
+```{r}
+
+x <- wiki_hot_100s |>
+    as_tibble() |>
+    mutate(year = parse_number(year)) |>
+    group_by(year) |>
+    distinct(artist) |>
+    summarize(distinct_artist = n()) |>
+    arrange(desc(distinct_artist))
+
+x
+
+```
+
+
+
+```{r}
+plot <- x |>
+    ggplot(aes(year, distinct_artist, color='red'))+
+    geom_line()+
+    geom_point()+
+    labs(title="Number of Distinct Artist over time",
+         subtitle="The number of distinct artist fluctuates over time",
+         x="Year",
+         y="Distinct Artist",
+         caption="Wiki 100 Dataset")
+
+
+plot
+
+```
+
