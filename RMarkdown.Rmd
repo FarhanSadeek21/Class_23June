@@ -112,18 +112,16 @@ x
 
 
 ```{r}
-plot <- x |>
-    ggplot(aes(year, distinct_artist, color='red'))+
-    geom_line()+
+x |>
+    ggplot(aes(year, distinct_artist))+
     geom_point()+
+    theme_bw()+
+    geom_smooth(se=F, method=lm)+
     labs(title="Number of Distinct Artist over time",
          subtitle="The number of distinct artist fluctuates over time",
          x="Year",
          y="Distinct Artist",
          caption="Wiki 100 Dataset")
-
-
-plot
 
 ```
 
